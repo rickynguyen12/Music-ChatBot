@@ -1,5 +1,3 @@
-Flask
-python-dotenv
+flask
+flask-cors
 spotipy
-Flask-Cors
-gunicorn

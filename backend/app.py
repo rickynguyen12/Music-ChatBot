@@ -13,27 +13,25 @@ app.secret_key = os.getenv('FLASK_SECRET_KEY', os.urandom(24))
 # Allow only localhost frontend origin with credentials support
 CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
 
-
 # Configure session cookies for local development
 app.config.update(
-    SESSION_COOKIE_SAMESITE="None",
-    SESSION_COOKIE_SECURE=False,
+    SESSION_COOKIE_SAMESITE="None",  # Allow cross-site cookies for OAuth
+    SESSION_COOKIE_SECURE=False,     # Must be False for HTTP (localhost)
 )
 
 CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
 CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
 SCOPE = "user-read-private user-read-email"
-
-
+REDIRECT_URI = 'http://127.0.0.1:5000/callback'
 
 sp_oauth = SpotifyOAuth(
     client_id=CLIENT_ID,
     client_secret=CLIENT_SECRET,
-    redirect_uri='http://localhost:5001/callback',
-    scope="user-read-private user-read-email",
-    show_dialog=True
+    redirect_uri=REDIRECT_URI,
+    scope=SCOPE,
+    show_dialog=True,
+    cache_path=".spotifycache"
 )
-
 
 
 @app.route('/')
@@ -53,7 +51,7 @@ def callback():
     except Exception as e:
         return jsonify({'error': 'Failed to get access token', 'details': str(e)}), 500
 
-    return redirect("http://localhost:3000/welcome")
+    return redirect(url_for('welcome_user'))
 
 
 @app.route('/welcome')
@@ -112,6 +110,5 @@ def recommend():
     return jsonify(suggestions)
 
 if __name__ == '__main__':
-    app.run(host='localhost', port=5001, debug=True)
-
+    app.run(host='0.0.0.0', port=5001, debug=True)
 
