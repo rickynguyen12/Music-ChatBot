@@ -1,0 +1,27 @@
+# Ignore node_modules anywhere (frontend dependencies)
+**/node_modules/
+
+# Ignore frontend build output (if you create builds)
+frontend/build/
+frontend/dist/
+
+# Ignore backend Python virtual environment
+backend/venv/
+
+# Python typical ignores
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.env
+*.env
+
+# VSCode settings (optional, if you use VSCode)
+.vscode/
+
+# MacOS system files (optional)
+.DS_Store
+
+# Logs
+*.log
