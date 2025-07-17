@@ -15,7 +15,7 @@ export default function LoginPage() {
   }, [navigate]);
 
   const handleLogin = () => {
-    window.location.href = `${process.env.REACT_APP_BACKEND_URL}/`;
+    window.location.href = `${process.env.REACT_APP_BACKEND_URL}/login`;
   };
 
   return (
