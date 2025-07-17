@@ -15,27 +15,20 @@ export default function LoginPage() {
   }, [navigate]);
 
   const handleLogin = () => {
-    window.location.href = `${process.env.REACT_APP_BACKEND_URL}/login`;
+    window.location.href = `${process.env.REACT_APP_BACKEND_URL}/`;
   };
 
-  return (
-    <div>
-      <h1>Login</h1>
-      <button onClick={handleLogin}>Login with Spotify</button>
-    </div>
-  );
-}
   return (
     <div
       style={{
         height: '100vh',
-        width: '100vw',       // full viewport width
+        width: '100vw',
         backgroundColor: '#121212',
         color: '#eee',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center', // vertical center
-        alignItems: 'center',     // horizontal center
+        justifyContent: 'center',
+        alignItems: 'center',
         fontFamily: 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif',
         margin: 0,
         padding: 0,

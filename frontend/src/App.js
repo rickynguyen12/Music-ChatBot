@@ -4,8 +4,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import LoginPage from './LoginPage';
 import WelcomePage from './WelcomePage';
 
-const backendUrl = "https://music-chatbot-dzl6.onrender.com";
-
 export default function App() {
   return (
     <Router>
