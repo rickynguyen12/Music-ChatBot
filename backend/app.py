@@ -34,6 +34,8 @@ sp_oauth = SpotifyOAuth(
     cache_path=".spotifycache"
 )
 
+
+
 @app.route('/')
 def login():
     auth_url = sp_oauth.get_authorize_url()
