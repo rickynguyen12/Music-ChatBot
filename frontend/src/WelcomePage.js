@@ -8,11 +8,12 @@ export default function WelcomePage() {
     { sender: 'bot', text: 'Hi! What song would you like recommendations for?' },
   ]);
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(null);  // New error message state
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:5001/welcome', { credentials: 'include' })
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/welcome`, { credentials: 'include' })
       .then((res) => {
         if (!res.ok) throw new Error('Not logged in');
         return res.json();
@@ -26,7 +27,7 @@ export default function WelcomePage() {
   }, [chat]);
 
   const handleLogout = async () => {
-    await fetch('http://localhost:5001/logout', { credentials: 'include' });
+    await fetch(`${process.env.REACT_APP_BACKEND_URL}/logout`, { credentials: 'include' });
     navigate('/login');
   };
 
@@ -35,9 +36,10 @@ export default function WelcomePage() {
 
     setChat((prev) => [...prev, { sender: 'user', text: input }]);
     setLoading(true);
+    setErrorMsg(null); // Clear previous errors
 
     try {
-      const response = await fetch('http://localhost:5001/recommend', {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/recommend`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -66,11 +68,13 @@ export default function WelcomePage() {
           },
         ]);
       }
+      setInput(''); // Clear input only on success
     } catch (err) {
+      setErrorMsg(err.message);
+      // Do NOT clear input so user can retry
       setChat((prev) => [...prev, { sender: 'bot', text: err.message }]);
     }
 
-    setInput('');
     setLoading(false);
   };
 
@@ -221,6 +225,20 @@ export default function WelcomePage() {
           {loading ? 'Thinking...' : 'Send'}
         </button>
       </div>
+
+      {errorMsg && (
+        <div
+          style={{
+            backgroundColor: '#b33939',
+            color: '#eee',
+            padding: '0.5rem 1rem',
+            textAlign: 'center',
+          }}
+        >
+          {errorMsg}
+        </div>
+      )}
     </div>
   );
 }
+

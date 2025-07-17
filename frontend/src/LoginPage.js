@@ -5,7 +5,7 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:5001/welcome', { credentials: 'include' })
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/welcome`, { credentials: 'include' })
       .then(res => {
         if (res.ok) {
           navigate('/welcome');
@@ -15,9 +15,16 @@ export default function LoginPage() {
   }, [navigate]);
 
   const handleLogin = () => {
-    window.location.href = 'http://localhost:5001/';
+    window.location.href = `${process.env.REACT_APP_BACKEND_URL}/`;
   };
 
+  return (
+    <div>
+      <h1>Login</h1>
+      <button onClick={handleLogin}>Login with Spotify</button>
+    </div>
+  );
+}
   return (
     <div
       style={{
