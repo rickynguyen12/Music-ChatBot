@@ -49,11 +49,16 @@ def callback():
 
     try:
         token_info = sp_oauth.get_access_token(code)
-        session['token_info'] = token_info  # <-- This line MUST work
+        session['token_info'] = token_info
+
+        sp = spotipy.Spotify(auth=token_info['access_token'])
+        user_info = sp.current_user()
+        session['user_info'] = user_info
+
     except Exception as e:
         return jsonify({'error': 'Failed to get access token', 'details': str(e)}), 500
 
-    return redirect(url_for('welcome_user'))
+    return redirect("https://music-bot-frontend.onrender.com/welcome")
 
 
 @app.route('/welcome')
