@@ -36,7 +36,7 @@ export default function WelcomePage() {
 
     setChat((prev) => [...prev, { sender: 'user', text: input }]);
     setLoading(true);
-    setErrorMsg(null); // Clear previous errors
+    setErrorMsg(null);
 
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/recommend`, {
@@ -71,7 +71,6 @@ export default function WelcomePage() {
       setInput(''); // Clear input only on success
     } catch (err) {
       setErrorMsg(err.message);
-      // Do NOT clear input so user can retry
       setChat((prev) => [...prev, { sender: 'bot', text: err.message }]);
     }
 

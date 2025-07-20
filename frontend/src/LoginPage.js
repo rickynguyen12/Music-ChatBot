@@ -8,7 +8,7 @@ export default function LoginPage() {
     fetch(`${process.env.REACT_APP_BACKEND_URL}/welcome`, { credentials: 'include' })
       .then(res => {
         if (res.ok) {
-          navigate('https://music-chatbot-dzl6.onrender.com/welcome');
+          navigate('/welcome');
         }
       })
       .catch(() => {});
