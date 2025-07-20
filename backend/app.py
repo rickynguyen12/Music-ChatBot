@@ -15,6 +15,8 @@ CORS(app, supports_credentials=True, origins=[
     os.getenv('FRONTEND_URL')
 ])
 
+
+
 app.config.update(
     SESSION_COOKIE_SAMESITE="None",
     SESSION_COOKIE_SECURE=True
@@ -33,9 +35,6 @@ sp_oauth = SpotifyOAuth(
     show_dialog=True,
     cache_path=".spotifycache"
 )
-
-
-
 @app.route('/')
 def login():
     auth_url = sp_oauth.get_authorize_url()
@@ -58,7 +57,8 @@ def callback():
     except Exception as e:
         return jsonify({'error': 'Failed to get access token', 'details': str(e)}), 500
 
-    return redirect("https://music-bot-frontend.onrender.com/welcome")
+    return redirect(os.getenv('FRONTEND_URL') + '/welcome')
+
 
 
 @app.route('/welcome')
