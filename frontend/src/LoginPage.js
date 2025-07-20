@@ -1,9 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-
 export default function LoginPage() {
   const navigate = useNavigate();
 
@@ -20,16 +17,6 @@ export default function LoginPage() {
   const handleLogin = () => {
     window.location.href = `${process.env.REACT_APP_BACKEND_URL}/`;
   };
-
-  return (
-    <div style={{ textAlign: 'center', marginTop: 50 }}>
-      <h1>Login</h1>
-      <button onClick={handleLogin} style={{ padding: '10px 20px', fontSize: '1rem' }}>
-        Login with Spotify
-      </button>
-    </div>
-  );
-}
 
   return (
     <div
