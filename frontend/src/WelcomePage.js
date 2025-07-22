@@ -3,23 +3,40 @@ import { useNavigate } from 'react-router-dom';
 
 export default function WelcomePage() {
   const [user, setUser] = useState(null);
+  const [loadingUser, setLoadingUser] = useState(true);  // NEW: loading state for user fetch
   const [input, setInput] = useState('');
   const [chat, setChat] = useState([
     { sender: 'bot', text: 'Hi! What song would you like recommendations for?' },
   ]);
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState(null);  // New error message state
+  const [errorMsg, setErrorMsg] = useState(null);
   const messagesEndRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    let isMounted = true;
+
     fetch(`${process.env.REACT_APP_BACKEND_URL}/welcome`, { credentials: 'include' })
       .then((res) => {
         if (!res.ok) throw new Error('Not logged in');
         return res.json();
       })
-      .then((data) => setUser(data))
-      .catch(() => navigate('/login'));
+      .then((data) => {
+        if (isMounted) {
+          setUser(data);
+          setLoadingUser(false);
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setLoadingUser(false);
+          navigate('/login');
+        }
+      });
+
+    return () => {
+      isMounted = false;
+    };
   }, [navigate]);
 
   useEffect(() => {
@@ -68,10 +85,14 @@ export default function WelcomePage() {
           },
         ]);
       }
-      setInput(''); // Clear input only on success
+
+      setInput('');
     } catch (err) {
       setErrorMsg(err.message);
-      setChat((prev) => [...prev, { sender: 'bot', text: err.message }]);
+      setChat((prev) => [
+        ...prev,
+        { sender: 'bot', text: `⚠️ ${err.message}` },
+      ]);
     }
 
     setLoading(false);
@@ -82,6 +103,14 @@ export default function WelcomePage() {
       sendMessage();
     }
   };
+
+  if (loadingUser) {
+    return (
+      <div style={{ color: '#eee', textAlign: 'center', marginTop: '2rem' }}>
+        Loading user...
+      </div>
+    );
+  }
 
   return (
     <div
@@ -191,7 +220,7 @@ export default function WelcomePage() {
       >
         <input
           type="text"
-          placeholder="Type a song name and hit Enter..."
+          placeholder={loading ? 'Generating recommendations...' : 'Type a song name and hit Enter...'}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -240,4 +269,5 @@ export default function WelcomePage() {
     </div>
   );
 }
+
 

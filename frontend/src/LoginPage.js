@@ -5,17 +5,18 @@ export default function LoginPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-  fetch(`${process.env.REACT_APP_BACKEND_URL}/welcome`, {
-    credentials: 'include'
-  })
-    .then(res => {
-      if (res.ok) {
-        navigate('/welcome');
-      }
-    })
-    .catch(() => {});
-}, [navigate]);
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/welcome`, { credentials: 'include' })
+      .then(res => {
+        if (res.ok) {
+          navigate('/welcome');
+        }
+      })
+      .catch(() => {});
+  }, [navigate]);
 
+  const handleLogin = () => {
+    window.location.href = `${process.env.REACT_APP_BACKEND_URL}/`;
+  };
 
   return (
     <div
